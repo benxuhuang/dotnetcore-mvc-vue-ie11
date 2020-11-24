@@ -3,42 +3,46 @@ new Vue({
   data: {
     items: null,
     form: {
-      email: '',
-      name: ''
+      firstname: '',
+      lastname: ''
     },
     show: true
   },
-  mounted() {
+  mounted: function() {
     baseInstance.get('/SampleData')
-      .then(response => {
+      .then(function(response){
+        console.log(response.data);
         this.items = response.data;
-      });
+      }.bind(this));
   },
   methods: {
-    onSubmit(evt) {
+    onSubmit: function(evt) {
       evt.preventDefault();
       baseInstance.post('/PersonData', this.form)
-        .then(response => {
-          console.log(response);
-          this.reset();
-        })
+        .then(
+          function(response){
+            console.log(response);
+            console.log(this.items);
+            this.items.push(response.data)
+            this.reset();
+          }.bind(this)
+        )
         .catch(function (error) {
           console.log(error);
         });
     },
-    onReset(evt) {
+    onReset: function(evt) {
       evt.preventDefault();
       // Reset our form values
       this.reset();
     },
-    reset() {
-      this.form.email = '';
-      this.form.name = '';
-
+    reset: function() {
+      this.form.firstname = '';
+      this.form.lastname = '';
       this.show = false;
-      this.$nextTick(() => {
+      this.$nextTick(function() {
         this.show = true;
-      })
+      }.bind(this))
     }
   }
 })
