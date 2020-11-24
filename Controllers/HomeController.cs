@@ -62,7 +62,7 @@
         [HttpPost("[action]")]
         public IActionResult PersonData([FromBody]PersonDataModel data)
         {
-            return Ok();
+            return Ok(new {Age = 20, FirstName=data.firstname, LastName = data.lastname});
         }
     }
 }
